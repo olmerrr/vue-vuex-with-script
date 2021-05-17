@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://unpkg.com/vuex"></script>
+
+</head>
+<body>
+
+<div id="app">
+  <h1>{{header}}</h1>
+  <h2>{{welcome}}</h2>
+  <h3>{{counter}}</h3>
+  <button @click="increment">Add</button>
+</div>
+
+<script>
+const store = new Vuex.Store({
+  state: {
+    msg: 'Perfect App',
+    counter: 0
+  },// в стайте, описываю что у меня есть вначале
+  mutations: {
+    increment(state, payload) {
+      state.counter += payload;
+    }
+  },//синхронны, в мутации я описываю что нужно сделать
+  getters: {
+    msg(state) {
+      return state.msg;
+    },
+    counter(state) {
+      return state.counter;
+    }  // в геттерах, я описываю что я хочу получить
+  },
+  actions: {
+    increment(context, payload) {
+      setTimeout( () => {
+        context.commit('increment', payload)
+      },1300) 
+    }
+    }// в действиях я описываю асинхронность
+});
+new Vue({
+  el: '#app',
+  data() {
+    return {
+      msg: 'Welcome to App',
+      header: 'Vue'
+    }
+  },
+  computed: {
+    welcome() {
+      return store.getters.msg; //доступ к хранилищю
+    },
+    counter() {
+      return store.getters.counter;//доступ к хранилищю
+    }
+  },
+  methods: {
+    increment(state) {
+      store.dispatch('increment', 20)
+    }
+  }
+});
+</script>
+<style> 
+  .description {
+    padding: 5px;
+    border:1px dashed #333;
+  }
+</style>
+</body>
+</html>
